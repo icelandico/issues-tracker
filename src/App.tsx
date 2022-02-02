@@ -1,20 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Issue } from './components/Issue/Issue';
+import { issuesRepository } from './repository/issues';
+
+interface IIssue {
+    title: string;
+    number: number;
+}
 
 function App() {
-  return (
-    <div className="main__container">
-        <h1>Repository Issues Tracker</h1>
-        <div className="issues__container">
-            {
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((issue, idx) => {
-                    return <Issue issueNumber={idx} />
-                })
+    const [issues, setIssues] = useState<IIssue[]>([]);
 
-            }
-        </div>
-    </div>
+    useEffect(() => {
+        const getIssues = async () => {
+            const issuesPayload = await issuesRepository.getInitialIssues().then(data => data.json());
+            console.log('issues', issuesPayload)
+            setIssues(issuesPayload)
+        }
+
+        getIssues();
+    }, [])
+
+  return (
+      <div className="main__container">
+          <h1>Repository Issues Tracker</h1>
+      <div className="issues__container">
+          {
+              issues.map((issue) => {
+                  return <Issue issueNumber={issue.number} />
+              })
+
+          }
+      </div>
+</div>
   );
 }
 
