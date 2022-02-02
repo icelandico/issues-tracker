@@ -6,6 +6,7 @@ import { issuesRepository } from './repository/issues';
 interface IIssue {
     title: string;
     number: number;
+    created_at: string;
 }
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
       <div className="issues__container">
           {
               issues.map((issue) => {
-                  return <Issue issueNumber={issue.number} />
+                  return <Issue issueNumber={issue.number} issueDate={issue.created_at} issueTitle={issue.title} />
               })
 
           }

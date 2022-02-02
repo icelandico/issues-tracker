@@ -1,16 +1,20 @@
 import React from 'react';
 import './Issue.scss';
+import { formatDate } from '../../utils/formatDate';
 
 interface IIssueProps {
     issueNumber: number;
+    issueDate: string;
+    issueTitle: string;
 }
 
-export const Issue = ({ issueNumber }: IIssueProps) => {
+export const Issue = ({ issueNumber, issueDate, issueTitle }: IIssueProps) => {
+
     return (
-        <div>
-            <p>Issue Number: { issueNumber }</p>
-            <p>Issue title</p>
-            <p>Issue Date</p>
+        <div className="issue-item__container">
+            <p>Issue Number: #{ issueNumber }</p>
+            <p>{issueTitle}</p>
+            <p>{formatDate(issueDate)}</p>
         </div>
     )
 }
