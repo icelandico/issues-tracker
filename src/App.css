@@ -2,3 +2,10 @@
     width: 60%;
     margin: 0 auto;
 }
+
+.issues__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

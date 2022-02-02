@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Issue } from './components/Issue/Issue';
 import { issuesRepository } from './repository/issues';
+import { Loader } from "./components/Loader/Loader";
 
 interface IIssue {
     title: string;
@@ -27,10 +28,12 @@ function App() {
           <h1>Repository Issues Tracker</h1>
       <div className="issues__container">
           {
-              issues.map((issue) => {
-                  return <Issue issueNumber={issue.number} issueDate={issue.created_at} issueTitle={issue.title} />
-              })
-
+              issues.length > 0
+                  ?
+                  issues.map((issue) => {
+                    return <Issue issueNumber={issue.number} issueDate={issue.created_at} issueTitle={issue.title} />
+                  })
+                  : <Loader />
           }
       </div>
 </div>
