@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { Issue } from './components/Issue/Issue';
 import { issuesRepository } from './repository/issues';
@@ -12,19 +12,47 @@ interface IIssue {
 
 function App() {
     const [issues, setIssues] = useState<IIssue[]>([]);
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const mainContainerRef = useRef(null);
 
     useEffect(() => {
+        setIsLoading(true);
         const getIssues = async () => {
             const issuesPayload = await issuesRepository.getInitialIssues().then(data => data.json());
-            console.log('issues', issuesPayload)
             setIssues(issuesPayload)
+            setIsLoading(false);
         }
-
         getIssues();
     }, [])
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 30;
+            if (bottom) {
+                const newPage = page === 1 ? page + 2 : page + 1;
+                setPage(newPage);
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll)
+
+        return () => window.removeEventListener('scroll', handleScroll)
+    });
+
+    useEffect(() => {
+        setIsLoading(true);
+        const getNewIssues = async () => {
+            const newIssuesPayload = await issuesRepository.getNextIssues(page).then(data => data.json());
+            const newIssues = issues.concat(newIssuesPayload);
+            setIssues(newIssues);
+            setIsLoading(false)
+        }
+        page > 1 && getNewIssues();
+    }, [page])
+
   return (
-      <div className="main__container">
+      <div className="main__container" ref={mainContainerRef}>
           <h1>Repository Issues Tracker</h1>
       <div className="issues__container">
           {
@@ -35,6 +63,7 @@ function App() {
                   })
                   : <Loader />
           }
+          {isLoading && page > 1 && <Loader />}
       </div>
 </div>
   );
