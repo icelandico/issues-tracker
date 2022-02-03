@@ -1,0 +1,53 @@
+.issue-details__box {
+  margin: 2rem 0 5rem 0;
+  padding: 2rem;
+  background-color: #ffdd59;
+  border-radius: 0.5rem;
+}
+
+.issue-details__box-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.issue-details__box-content {
+  margin-right: 2rem;
+}
+
+.issue-details__back-button {
+  background-color: #9dde65;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  width: 12rem;
+  cursor: pointer;
+  font-size: 2rem;
+}
+
+.issue-details__body {
+  font-size: 2rem;
+}
+
+.issue-details__voting-arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  cursor: pointer;
+}
+
+.issue-details__voting-up {
+  border-color: transparent transparent #776d48 transparent;
+  border-width: 0 3rem 3rem 3rem;
+}
+
+.issue-details__voting-down {
+  border-color: #776d48 transparent transparent transparent;
+  border-width: 3rem 3rem 0 3rem;
+}
+
+.issue-details__voting-score {
+  margin: 1rem 0;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+}

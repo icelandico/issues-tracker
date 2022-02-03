@@ -2,18 +2,22 @@ import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { Issue } from './components/Issue/Issue';
 import { issuesRepository } from './repository/issues';
-import { Loader } from "./components/Loader/Loader";
+import { Loader } from './components/Loader/Loader';
+import { IssueDetails } from './components/IssueDetails/IssueDetails';
 
 interface IIssue {
     title: string;
     number: number;
     created_at: string;
+    state: string;
+    body: string;
 }
 
 function App() {
     const [issues, setIssues] = useState<IIssue[]>([]);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [issueDetails, setIssueDetails] = useState<IIssue | null>(null);
     const mainContainerRef = useRef(null);
 
     useEffect(() => {
@@ -54,17 +58,36 @@ function App() {
   return (
       <div className="main__container" ref={mainContainerRef}>
           <h1>Repository Issues Tracker</h1>
-      <div className="issues__container">
           {
-              issues.length > 0
-                  ?
-                  issues.map((issue) => {
-                    return <Issue issueNumber={issue.number} issueDate={issue.created_at} issueTitle={issue.title} />
-                  })
-                  : <Loader />
+              !issueDetails && (
+                  <div className="issues__container">
+                      {
+                          issues.length > 0
+                              ?
+                              issues.map((issue) => {
+                                  return (
+                                      <Issue issueNumber={issue.number}
+                                             issueDate={issue.created_at}
+                                             issueTitle={issue.title}
+                                             showIssueDetails={() => setIssueDetails(issue)}
+                                      />
+                                  )
+                              })
+                              : <Loader />
+                      }
+                      {isLoading && page > 1 && <Loader />}
+                  </div>
+              )
           }
-          {isLoading && page > 1 && <Loader />}
-      </div>
+          {
+              issueDetails &&
+              <IssueDetails issueTitle={issueDetails.title}
+                            issueBody={issueDetails.body}
+                            issueState={issueDetails.state}
+                            showIssueDetails={() => setIssueDetails(null)}
+              />
+          }
+
 </div>
   );
 }
