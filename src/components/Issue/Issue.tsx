@@ -14,8 +14,8 @@ export const Issue = ({ issueNumber, issueDate, issueTitle, showIssueDetails }: 
     return (
         <div className="issue-item__container" onClick={showIssueDetails}>
             <p>Issue Number: #{ issueNumber }</p>
-            <p>{issueTitle}</p>
-            <p>{formatDate(issueDate)}</p>
+            <p className="issue-item__title">{issueTitle}</p>
+            <p className="issue-item__date">{formatDate(issueDate)}</p>
         </div>
     )
 }

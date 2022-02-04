@@ -4,6 +4,8 @@ import { Issue } from './components/Issue/Issue';
 import { issuesRepository } from './repository/issues';
 import { Loader } from './components/Loader/Loader';
 import { IssueDetails } from './components/IssueDetails/IssueDetails';
+import { Finder } from './components/Finder/Finder';
+import { NoResultsWidget } from './components/NoResultsWidget/NoResultsWidget';
 
 interface IIssue {
     title: string;
@@ -15,6 +17,7 @@ interface IIssue {
 
 function App() {
     const [issues, setIssues] = useState<IIssue[]>([]);
+    const [filteredIssues, setFilteredIssues] = useState<IIssue[]>([]);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [issueDetails, setIssueDetails] = useState<IIssue | null>(null);
@@ -24,7 +27,8 @@ function App() {
         setIsLoading(true);
         const getIssues = async () => {
             const issuesPayload = await issuesRepository.getInitialIssues().then(data => data.json());
-            setIssues(issuesPayload)
+            setIssues(issuesPayload);
+            setFilteredIssues(issuesPayload);
             setIsLoading(false);
         }
         getIssues();
@@ -50,10 +54,19 @@ function App() {
             const newIssuesPayload = await issuesRepository.getNextIssues(page).then(data => data.json());
             const newIssues = issues.concat(newIssuesPayload);
             setIssues(newIssues);
+            setFilteredIssues(newIssues);
             setIsLoading(false)
         }
         page > 1 && getNewIssues();
     }, [page])
+
+    const handleFilter = (phrase: string) => {
+        const collectionCopy = [...issues];
+        const matchByNumber = collectionCopy.filter(issue => issue.number.toString().includes(phrase));
+        const matchByPhrase = collectionCopy.filter(issue => issue.title.toLowerCase().includes(phrase.toLowerCase()));
+        const filteredIssues = matchByNumber.concat(matchByPhrase);
+        setFilteredIssues(filteredIssues);
+    }
 
   return (
       <div className="main__container" ref={mainContainerRef}>
@@ -61,10 +74,11 @@ function App() {
           {
               !issueDetails && (
                   <div className="issues__container">
+                      { issues.length > 0 && <Finder handleFilter={handleFilter}/> }
                       {
                           issues.length > 0
                               ?
-                              issues.map((issue) => {
+                              filteredIssues.map((issue) => {
                                   return (
                                       <Issue issueNumber={issue.number}
                                              issueDate={issue.created_at}
@@ -76,6 +90,7 @@ function App() {
                               : <Loader />
                       }
                       {isLoading && page > 1 && <Loader />}
+                      {!isLoading && filteredIssues.length === 0 && <NoResultsWidget />}
                   </div>
               )
           }
