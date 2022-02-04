@@ -84,6 +84,7 @@ function App() {
               <IssueDetails issueTitle={issueDetails.title}
                             issueBody={issueDetails.body}
                             issueState={issueDetails.state}
+                            issueNumber={issueDetails.number}
                             showIssueDetails={() => setIssueDetails(null)}
               />
           }
