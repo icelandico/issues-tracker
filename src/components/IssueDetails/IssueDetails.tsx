@@ -2,6 +2,7 @@ import React from 'react';
 import './IssueDetails.scss';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import Link from './../Link/Link';
+import { Loader } from '../Loader/Loader';
 
 interface IIssueDetailsProps {
     issueTitle: string;
@@ -9,9 +10,10 @@ interface IIssueDetailsProps {
     issueState: string;
     issueNumber: number;
     showIssueDetails: () => void;
+    isLoading: boolean;
 }
 
-export const IssueDetails = ({ issueNumber, issueTitle, issueBody, issueState, showIssueDetails }: IIssueDetailsProps) => {
+export const IssueDetails = ({ isLoading, issueNumber, issueTitle, issueBody, issueState, showIssueDetails }: IIssueDetailsProps) => {
     const [issue, setIssueScore] = useLocalStorage(issueNumber);
 
     const parseIssueScore = (score: number) => {
@@ -23,24 +25,31 @@ export const IssueDetails = ({ issueNumber, issueTitle, issueBody, issueState, s
 
     return (
         <div className="issue-details-page__container">
-            <div className="issue-details__box">
-                <h1>{issueTitle}</h1>
-                <div className="issue-details__box-main">
-                    <div className="issue-details__box-content">
-                        <h2>Issue status: {issueState}</h2>
-                        <div className="issue-details__body" >{issueBody}</div>
+            {!isLoading ?
+                (
+                <>
+                    <div className="issue-details__box">
+                        <h1>{issueTitle}</h1>
+                        <div className="issue-details__box-main">
+                            <div className="issue-details__box-content">
+                                <h2>Issue status: {issueState}</h2>
+                                <div className="issue-details__body" >{issueBody}</div>
+                            </div>
+                            <div className="issue-details__voting">
+                                <div className="issue-details__voting-arrow issue-details__voting-up" onClick={() => setIssueScore(issue.score + 1)}></div>
+                                <div className="issue-details__voting-score">{parseIssueScore(issue.score)}</div>
+                                <div className="issue-details__voting-arrow issue-details__voting-down" onClick={() => setIssueScore(issue.score - 1)}></div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="issue-details__voting">
-                        <div className="issue-details__voting-arrow issue-details__voting-up" onClick={() => setIssueScore(issue.score + 1)}></div>
-                        <div className="issue-details__voting-score">{parseIssueScore(issue.score)}</div>
-                        <div className="issue-details__voting-arrow issue-details__voting-down" onClick={() => setIssueScore(issue.score - 1)}></div>
-                    </div>
-                </div>
-            </div>
 
-            <Link href="/">
-                <div className="issue-details__back-button" onClick={showIssueDetails}>Back to List</div>
-            </Link>
+                    <Link href="/">
+                        <div className="issue-details__back-button" onClick={showIssueDetails}>Back to List</div>
+                    </Link>
+                </>
+                )
+                : <Loader />
+            }
         </div>
     )
 }

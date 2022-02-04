@@ -1,15 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './App.css';
-import { Issue } from './components/Issue/Issue';
 import { issuesRepository } from './repository/issues';
-import { Loader } from './components/Loader/Loader';
 import { IssueDetails } from './components/IssueDetails/IssueDetails';
-import { Finder } from './components/Finder/Finder';
-import { NoResultsWidget } from './components/NoResultsWidget/NoResultsWidget';
 import { Route } from './components/Route/Route';
-import Link from './components/Link/Link';
+import { IssuesList } from './components/IssuesList/IssuesList';
+import './App.css';
 
-interface IIssue {
+export interface IIssue {
     title: string;
     number: number;
     created_at: string;
@@ -26,6 +22,7 @@ function App() {
     const mainContainerRef = useRef(null);
 
     useEffect(() => {
+        console.log('CHANGE PAGE')
         setIsLoading(true);
         const getIssues = async () => {
             const issuesPayload = await issuesRepository.getInitialIssues().then(data => data.json());
@@ -33,8 +30,22 @@ function App() {
             setFilteredIssues(issuesPayload);
             setIsLoading(false);
         }
-        getIssues();
+
+        const getSingleIssue = async () => {
+            const issuePath = window.location.pathname;
+            const matchRgx = issuePath.match(/(?<=issue-)[0-9]+/);
+            const issueNumber = matchRgx ? matchRgx[0] : '';
+            const issuePayload = await issuesRepository.getIssueByNumber(issueNumber).then(data => data.json());
+            setIssueDetails(issuePayload);
+            setIsLoading(false);
+        }
+        isIssuePage() ? getSingleIssue() : getIssues();
     }, [])
+
+    const isIssuePage = () => {
+        const currentPathname = window.location.pathname;
+        return currentPathname.includes('issue-')
+    }
 
     useEffect(() => {
         const handleScroll = () => {
@@ -74,45 +85,29 @@ function App() {
       <div className="main__container" ref={mainContainerRef}>
           <h1>Repository Issues Tracker</h1>
           {
-              !issueDetails && (
-                  <div className="issues__container">
-                      { issues.length > 0 && <Finder handleFilter={handleFilter}/> }
-                      {
-                          issues.length > 0
-                              ?
-                              filteredIssues.map((issue) => {
-                                  return (
-                                      <Link href={`/issue-${issue.number}`}>
-                                          <Issue issueNumber={issue.number}
-                                                 issueDate={issue.created_at}
-                                                 issueTitle={issue.title}
-                                                 showIssueDetails={() => setIssueDetails(issue)}
-                                          />
-                                      </Link>
-                                  )
-                              })
-                              : <Loader />
-                      }
-                      {isLoading && page > 1 && <Loader />}
-                      {!isLoading && filteredIssues.length === 0 && <NoResultsWidget />}
-                  </div>
-              )
+              <Route path={`/`}>
+                  <IssuesList
+                    issues={issues}
+                    filteredIssues={filteredIssues}
+                    page={page}
+                    isLoading={isLoading}
+                    handleFilter={handleFilter}
+                    setIssueDetails={setIssueDetails}
+                  />
+              </Route>
           }
-          {
-              issueDetails &&
-              <>
-                  <Route path={`/issue-${issueDetails.number}`}>
-                      <IssueDetails issueTitle={issueDetails.title}
-                                    issueBody={issueDetails.body}
-                                    issueState={issueDetails.state}
-                                    issueNumber={issueDetails.number}
-                                    showIssueDetails={() => setIssueDetails(null)}
-                      />
-                  </Route>
-              </>
+          {issueDetails &&
+              <Route path={`/issue-${issueDetails.number}`}>
+                  <IssueDetails issueTitle={issueDetails.title}
+                                issueBody={issueDetails.body}
+                                issueState={issueDetails.state}
+                                issueNumber={issueDetails.number}
+                                showIssueDetails={() => setIssueDetails(null)}
+                                isLoading={isLoading}
+                  />
+              </Route>
           }
-
-</div>
+      </div>
   );
 }
 
