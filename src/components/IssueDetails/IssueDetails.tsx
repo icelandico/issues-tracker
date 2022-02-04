@@ -1,6 +1,7 @@
 import React from 'react';
 import './IssueDetails.scss';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import Link from './../Link/Link';
 
 interface IIssueDetailsProps {
     issueTitle: string;
@@ -37,7 +38,9 @@ export const IssueDetails = ({ issueNumber, issueTitle, issueBody, issueState, s
                 </div>
             </div>
 
-            <div className="issue-details__back-button" onClick={showIssueDetails}>Go Back To Issues List</div>
+            <Link href="/">
+                <div className="issue-details__back-button" onClick={showIssueDetails}>Back to List</div>
+            </Link>
         </div>
     )
 }

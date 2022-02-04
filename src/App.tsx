@@ -6,6 +6,8 @@ import { Loader } from './components/Loader/Loader';
 import { IssueDetails } from './components/IssueDetails/IssueDetails';
 import { Finder } from './components/Finder/Finder';
 import { NoResultsWidget } from './components/NoResultsWidget/NoResultsWidget';
+import { Route } from './components/Route/Route';
+import Link from './components/Link/Link';
 
 interface IIssue {
     title: string;
@@ -80,11 +82,13 @@ function App() {
                               ?
                               filteredIssues.map((issue) => {
                                   return (
-                                      <Issue issueNumber={issue.number}
-                                             issueDate={issue.created_at}
-                                             issueTitle={issue.title}
-                                             showIssueDetails={() => setIssueDetails(issue)}
-                                      />
+                                      <Link href={`/issue-${issue.number}`}>
+                                          <Issue issueNumber={issue.number}
+                                                 issueDate={issue.created_at}
+                                                 issueTitle={issue.title}
+                                                 showIssueDetails={() => setIssueDetails(issue)}
+                                          />
+                                      </Link>
                                   )
                               })
                               : <Loader />
@@ -96,12 +100,16 @@ function App() {
           }
           {
               issueDetails &&
-              <IssueDetails issueTitle={issueDetails.title}
-                            issueBody={issueDetails.body}
-                            issueState={issueDetails.state}
-                            issueNumber={issueDetails.number}
-                            showIssueDetails={() => setIssueDetails(null)}
-              />
+              <>
+                  <Route path={`/issue-${issueDetails.number}`}>
+                      <IssueDetails issueTitle={issueDetails.title}
+                                    issueBody={issueDetails.body}
+                                    issueState={issueDetails.state}
+                                    issueNumber={issueDetails.number}
+                                    showIssueDetails={() => setIssueDetails(null)}
+                      />
+                  </Route>
+              </>
           }
 
 </div>
