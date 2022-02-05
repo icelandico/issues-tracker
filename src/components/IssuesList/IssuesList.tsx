@@ -18,10 +18,10 @@ interface IIssuesListProps {
 export const IssuesList = ({ issues, filteredIssues, isLoading, page, handleFilter, setIssueDetails }: IIssuesListProps) => {
     return (
         <div className="issues__container">
-            { issues.length > 0 && <Finder handleFilter={handleFilter}/> }
+            { issues.length > 0 && <Finder handleFilter={handleFilter} /> }
             {
                 issues.length > 0
-                    ?
+                    &&
                     filteredIssues.map((issue) => {
                         return (
                             <Link href={`/issue-${issue.number}`}>
@@ -33,7 +33,6 @@ export const IssuesList = ({ issues, filteredIssues, isLoading, page, handleFilt
                             </Link>
                         )
                     })
-                    : <Loader />
             }
             {isLoading && page > 1 && <Loader />}
             {!isLoading && filteredIssues.length === 0 && <NoResultsWidget />}

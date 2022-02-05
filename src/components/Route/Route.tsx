@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 
 interface  IRouteProps {
     path: string;
-    children: any;
+    children: ReactElement;
 }
 
 export const Route = ({ path, children }: IRouteProps) => {

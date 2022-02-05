@@ -3,7 +3,8 @@ import { issuesRepository } from './repository/issues';
 import { IssueDetails } from './components/IssueDetails/IssueDetails';
 import { Route } from './components/Route/Route';
 import { IssuesList } from './components/IssuesList/IssuesList';
-import './App.css';
+import './App.scss';
+import { Loader } from './components/Loader/Loader';
 
 export interface IIssue {
     title: string;
@@ -21,30 +22,30 @@ function App() {
     const [issueDetails, setIssueDetails] = useState<IIssue | null>(null);
     const mainContainerRef = useRef(null);
 
-    useEffect(() => {
-        console.log('CHANGE PAGE')
-        setIsLoading(true);
-        const getIssues = async () => {
-            const issuesPayload = await issuesRepository.getInitialIssues().then(data => data.json());
-            setIssues(issuesPayload);
-            setFilteredIssues(issuesPayload);
-            setIsLoading(false);
-        }
 
+    useEffect(() => {
+        setIsLoading(true);
         const getSingleIssue = async () => {
             const issuePath = window.location.pathname;
             const matchRgx = issuePath.match(/(?<=issue-)[0-9]+/);
             const issueNumber = matchRgx ? matchRgx[0] : '';
             const issuePayload = await issuesRepository.getIssueByNumber(issueNumber).then(data => data.json());
-            setIssueDetails(issuePayload);
-            setIsLoading(false);
+            setIssueDetails(issuePayload)
+            setIsLoading(false)
         }
+
         isIssuePage() ? getSingleIssue() : getIssues();
-    }, [])
+    }, []);
+
+    const getIssues = async () => {
+        const issuesPayload = await issuesRepository.getInitialIssues().then(data => data.json());
+        setIssues(issuesPayload);
+        setFilteredIssues(issuesPayload)
+    }
 
     const isIssuePage = () => {
         const currentPathname = window.location.pathname;
-        return currentPathname.includes('issue-')
+        return currentPathname.includes('issue-');
     }
 
     useEffect(() => {
@@ -69,6 +70,7 @@ function App() {
             setIssues(newIssues);
             setFilteredIssues(newIssues);
             setIsLoading(false)
+
         }
         page > 1 && getNewIssues();
     }, [page])
@@ -81,32 +83,44 @@ function App() {
         setFilteredIssues(filteredIssues);
     }
 
+    const handleFilteredIssues = () => {
+        if (issues.length > 0) {
+            setFilteredIssues(issues);
+            return;
+        }
+            setIsLoading(true);
+            getIssues();
+    }
+
   return (
       <div className="main__container" ref={mainContainerRef}>
           <h1>Repository Issues Tracker</h1>
           {
               <Route path={`/`}>
                   <IssuesList
-                    issues={issues}
-                    filteredIssues={filteredIssues}
-                    page={page}
-                    isLoading={isLoading}
-                    handleFilter={handleFilter}
-                    setIssueDetails={setIssueDetails}
+                      issues={issues}
+                      filteredIssues={filteredIssues}
+                      page={page}
+                      isLoading={isLoading}
+                      handleFilter={handleFilter}
+                      setIssueDetails={setIssueDetails}
                   />
               </Route>
           }
-          {issueDetails &&
-              <Route path={`/issue-${issueDetails.number}`}>
-                  <IssueDetails issueTitle={issueDetails.title}
-                                issueBody={issueDetails.body}
-                                issueState={issueDetails.state}
-                                issueNumber={issueDetails.number}
-                                showIssueDetails={() => setIssueDetails(null)}
-                                isLoading={isLoading}
-                  />
-              </Route>
+          {
+              issueDetails&&
+                  <Route path={`/issue-${issueDetails.number}`}>
+                      <>
+                          <IssueDetails issueDetails={issueDetails}
+                                        showIssueDetails={() => {
+                                            setIssueDetails(null);
+                                            handleFilteredIssues();
+                                        }}
+                          />
+                      </>
+                  </Route>
           }
+          {!issueDetails && issues.length === 0 && <Loader />}
       </div>
   );
 }
