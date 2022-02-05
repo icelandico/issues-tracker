@@ -1,8 +1,8 @@
 import React from 'react';
-import './IssueDetails.scss';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import Link from './../Link/Link';
 import { IIssue } from '../../App';
+import './IssueDetails.scss';
 
 interface IIssueDetailsProps {
     issueDetails: IIssue;

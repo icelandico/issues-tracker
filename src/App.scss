@@ -7,7 +7,6 @@
     @media (min-width: $md) {
         width: 60%;
     }
-
 }
 
 .issues__container {
@@ -16,5 +15,17 @@
     align-items: center;
     flex-direction: column;
     margin-top: 2rem;
+}
 
+.main__container-footer {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eae7e7;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2.5rem;
+    font-size: 1.4rem;
 }

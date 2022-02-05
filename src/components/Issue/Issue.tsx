@@ -1,6 +1,6 @@
 import React from 'react';
-import './Issue.scss';
 import { formatDate } from '../../utils/formatDate';
+import './Issue.scss';
 
 interface IIssueProps {
     issueNumber: number;

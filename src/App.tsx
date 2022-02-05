@@ -3,8 +3,8 @@ import { issuesRepository } from './repository/issues';
 import { IssueDetails } from './components/IssueDetails/IssueDetails';
 import { Route } from './components/Route/Route';
 import { IssuesList } from './components/IssuesList/IssuesList';
-import './App.scss';
 import { Loader } from './components/Loader/Loader';
+import './App.scss';
 
 export interface IIssue {
     title: string;
@@ -121,6 +121,11 @@ function App() {
                   </Route>
           }
           {!issueDetails && issues.length === 0 && <Loader />}
+
+      <div className="main__container-footer">
+          <span>Author: <a href="https://michalmuszynski.com" target="_blank">Michał Muszyński</a></span>
+      </div>
+
       </div>
   );
 }
