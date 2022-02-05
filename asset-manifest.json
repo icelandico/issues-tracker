@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/issues-viewer/static/css/main.531206cc.css",
+    "main.js": "/issues-viewer/static/js/main.af2dbcb9.js",
+    "static/js/787.84562d09.chunk.js": "/issues-viewer/static/js/787.84562d09.chunk.js",
+    "index.html": "/issues-viewer/index.html",
+    "main.531206cc.css.map": "/issues-viewer/static/css/main.531206cc.css.map",
+    "main.af2dbcb9.js.map": "/issues-viewer/static/js/main.af2dbcb9.js.map",
+    "787.84562d09.chunk.js.map": "/issues-viewer/static/js/787.84562d09.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.531206cc.css",
+    "static/js/main.af2dbcb9.js"
+  ]
+}
