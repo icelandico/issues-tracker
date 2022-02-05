@@ -96,7 +96,7 @@ function App() {
       <div className="main__container" ref={mainContainerRef}>
           <h1>Repository Issues Tracker</h1>
           {
-              <Route path={window.location.href}>
+              <Route path={`/`}>
                   <IssuesList
                       issues={issues}
                       filteredIssues={filteredIssues}
@@ -109,7 +109,7 @@ function App() {
           }
           {
               issueDetails&&
-                  <Route path={`${window.location.href}issue-${issueDetails.number}`}>
+                  <Route path={`/issue-${issueDetails.number}`}>
                       <>
                           <IssueDetails issueDetails={issueDetails}
                                         showIssueDetails={() => {

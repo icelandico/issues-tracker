@@ -6,7 +6,7 @@ interface  IRouteProps {
 }
 
 export const Route = ({ path, children }: IRouteProps) => {
-    const [currentPath, setCurrentPath] = useState(window.location.href);
+    const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
     useEffect(() => {
         const onLocationChange = () => {
