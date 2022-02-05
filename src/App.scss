@@ -1,6 +1,13 @@
+@import './variables';
+
 .main__container {
-    width: 60%;
-    margin: 0 auto;
+    margin: 0 auto 5rem auto;
+    width: 90%;
+
+    @media (min-width: $md) {
+        width: 60%;
+    }
+
 }
 
 .issues__container {
@@ -9,4 +16,5 @@
     align-items: center;
     flex-direction: column;
     margin-top: 2rem;
+
 }

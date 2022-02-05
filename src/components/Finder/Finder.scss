@@ -1,11 +1,18 @@
+@import './../../variables';
+
 .issues-finder__container {
-  padding: 1rem;
+  width: 100%;
+  margin: 1rem 0;
 }
 
 .issues-finder__input {
-  padding: 1rem;
   width: 100%;
-  border: 0.1rem solid #9dde65;
+  padding: 1rem;
+  border: 0.2rem solid #ccc;
   border-radius: 0.5rem;
-  font-size: 2rem;
+  font-size: 1.6rem;
+
+  @media (min-width: $md) {
+    font-size: 2rem;
+  }
 }

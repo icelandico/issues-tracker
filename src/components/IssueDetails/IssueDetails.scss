@@ -1,3 +1,5 @@
+@import './../../variables';
+
 .issue-details__box {
   margin: 2rem 0 5rem 0;
   padding: 2rem;
@@ -7,25 +9,47 @@
 
 .issue-details__box-main {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+  @media (min-width: $md) {
+    flex-direction: row;
+  }
 }
 
 .issue-details__box-content {
-  margin-right: 2rem;
+  width: 100%;
+
+  @media (min-width: $md) {
+    margin-right: 2rem;
+  }
 }
 
 .issue-details__back-button {
   background-color: #9dde65;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  width: 12rem;
   cursor: pointer;
   font-size: 2rem;
+  text-align: center;
+
+  @media (min-width: $md) {
+    width: 20rem;
+  }
 }
 
 .issue-details__body {
+  word-break: break-word;
   font-size: 2rem;
+}
+
+.issue-details__voting {
+  margin-top: 2rem;
+
+  @media (min-width: $md) {
+    margin-top: 0;
+  }
 }
 
 .issue-details__voting-arrow {
