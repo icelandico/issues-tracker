@@ -24,7 +24,7 @@ export const IssuesList = ({ issues, filteredIssues, isLoading, page, handleFilt
                     &&
                     filteredIssues.map((issue) => {
                         return (
-                            <Link href={`/issue-${issue.number}`}>
+                            <Link href={`/issue-${issue.number}`} key={issue.number}>
                                 <Issue issueNumber={issue.number}
                                        issueDate={issue.created_at}
                                        issueTitle={issue.title}

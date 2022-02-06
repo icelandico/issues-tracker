@@ -123,7 +123,7 @@ function App() {
           {!issueDetails && issues.length === 0 && <Loader />}
 
       <div className="main__container-footer">
-          <span>Author: <a href="https://michalmuszynski.com" target="_blank">Michał Muszyński</a></span>
+          <span>Author: <a href="https://michalmuszynski.com" target="_blank" rel="noreferrer">Michał Muszyński</a></span>
       </div>
 
       </div>
